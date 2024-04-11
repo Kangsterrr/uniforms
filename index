@@ -1,0 +1,25 @@
+
+const ss = SpreadsheetApp.openByUrl("https://docs.google.com/spreadsheets/d/1UZ-Ywt4YbX5UaBA-C5c7chF69PUmAOTk2uySO9MpPdo/edit#gid=0");
+
+const ws = ss.getSheetByName("24연차");
+
+
+let data;
+
+function doGet() {
+  var tmp = HtmlService.createHtmlOutputFromFile('index.html');
+  tmp.setSandboxMode(HtmlService.SandboxMode.IFRAME);
+  tmp.setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
+  return tmp;
+} 
+
+function doSearchResult(yourId, yourName, yourBirth, yourRank) {
+  data = ws.getRange(4, 2, ws.getLastRow()-1, 25).getValues();
+
+  let filtered = data.filter(function(r){
+    return r[0] == yourId && r[1] == yourName && r[2] == yourBirth && r[3] == yourRank ;
+  })
+  //console.log(filtered);
+  if(filtered.length == 1) return filtered[0][1] + "님의 잔여 연차는 " + filtered[0][22] + "일입니다.";
+  else return "검색 결과가 없습니다. 정확하게 입력했는지 확인 바랍니다.";
+}
